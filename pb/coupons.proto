@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package coupons.v1;
+
+service Coupons {
+    rpc CreateNewCoupon(AddNewCouponRequest) returns (AddNewCouponResponse);
+}
+
+message AddNewCouponRequest {
+    string title = 1;
+    string description = 2;
+    float multiplier = 3;
+}
+
+message AddNewCouponResponse {
+    int32 id = 1;
+}
