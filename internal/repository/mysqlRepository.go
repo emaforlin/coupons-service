@@ -5,7 +5,6 @@ import (
 
 	"github.com/emaforlin/coupons-service/internal/database"
 	"github.com/emaforlin/coupons-service/internal/entities"
-	"github.com/emaforlin/coupons-service/pkg/models"
 	"gorm.io/gorm"
 )
 
@@ -14,12 +13,24 @@ type couponsMysqlRepository struct {
 }
 
 // SelectCoupon implements CouponsRepository.
-func (c *couponsMysqlRepository) SelectCoupon(in *models.GetCouponData) (*entities.Coupon, error) {
-	panic("unimplemented")
+func (c *couponsMysqlRepository) SelectCoupon(in *entities.GetCouponDto) (*entities.Coupon, error) {
+	found := new(entities.InsertCouponDto)
+	err := c.db.GetDb().Model(entities.GetCouponDto{}).First(&found, in).Error
+	if err != nil {
+		return nil, errors.New("coupon not found")
+	}
+	return &entities.Coupon{
+		ID:          found.ID,
+		Title:       found.Title,
+		Description: found.Description,
+		Author:      found.Author,
+		Multiplier:  found.Multiplier,
+		Active:      found.Active,
+	}, nil
 }
 
 // InsertCoupon implements CouponsRepository.
-func (c *couponsMysqlRepository) InsertCoupon(in *models.AddCouponData) error {
+func (c *couponsMysqlRepository) InsertCoupon(in *entities.InsertCouponDto) error {
 	res := c.db.GetDb().Create(in)
 	if err := res.Error; err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {

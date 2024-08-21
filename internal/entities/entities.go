@@ -22,7 +22,14 @@ type (
 		Title       string  `json:"title"`
 		Description string  `json:"decription"`
 		Multiplier  float32 `json:"multiplier"`
+		Author      int     `json:"author"`
 		Active      bool
-		Author      int `json:"author"`
 	}
 )
+
+func (InsertCouponDto) TableName() string {
+	return "coupons"
+}
+func (GetCouponDto) TableName() string {
+	return "coupons"
+}

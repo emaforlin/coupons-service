@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/emaforlin/coupons-service/internal/config"
+	"github.com/emaforlin/coupons-service/internal/entities"
 	"github.com/hashicorp/go-hclog"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ type mysqlDatabase struct {
 
 // AutoMigrate implements Database.
 func (p *mysqlDatabase) AutoMigrate() error {
-	panic("unimplemented")
+	return p.db.AutoMigrate(entities.InsertCouponDto{})
 }
 
 func NewMySQLDatabase(cfg *config.Config, l hclog.Logger) Database {
